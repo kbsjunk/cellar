@@ -30,7 +30,7 @@ class MakeModelsCommand extends Command
     public function handle()
     {
 
-        $files = File::allFiles(base_path('.wk'));
+        $files = File::allFiles(base_path('.wk/ct_tables'));
 
         $relations = [];
 
@@ -75,16 +75,18 @@ class MakeModelsCommand extends Command
             '    }',
             ];
 
-            foreach ($relations as $relation => $modelName) {
-                if ($modelName != $model) {
+            if ($model != 'CTTag') {
+                foreach ($relations as $relation => $modelName) {
+                    if ($modelName != $model && $modelName != 'CTTag') {
 
-                    $relationship = $modelName == 'CTInventory' ? 'hasMany' : 'hasOne';
+                        $relationship = $modelName == 'CTInventory' ? 'hasMany' : 'hasOne';
 
-                    $lines[] = null;
-                    $lines[] = '    public function '.$relation.'()';
-                    $lines[] = '    {';
-                    $lines[] = '        return $this->'.$relationship.'(\'Cellar\\'.$model.'\', \'i_wine\', \'i_wine\');';
-                    $lines[] = '    }';
+                        $lines[] = null;
+                        $lines[] = '    public function '.$relation.'()';
+                        $lines[] = '    {';
+                        $lines[] = '        return $this->'.$relationship.'(\'Cellar\\'.$model.'\', \'i_wine\', \'i_wine\');';
+                        $lines[] = '    }';
+                    }
                 }
             }
 

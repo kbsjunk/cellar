@@ -68,7 +68,7 @@ class MakeMigrationsCommand extends Command
 
         File::delete($oldMigrations);
 
-        $files = File::allFiles(base_path('.wk'));
+        $files = File::allFiles(base_path('.wk/ct_tables'));
 
         foreach ($files as $file) {
 

@@ -1,0 +1,1 @@
+https://www.cellartracker.com/xlquery.asp?table=Availability&User={}&Password={}
