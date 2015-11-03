@@ -20,8 +20,8 @@ f_helpful
 rating
 tasting_notes
 f_like_it
-cnotes
-cscore
+c_notes
+c_score
 like_votes
 like_percent
 votes

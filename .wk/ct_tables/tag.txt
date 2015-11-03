@@ -22,4 +22,4 @@ country
 region
 sub_region
 appellation
-upccode
+upc_code

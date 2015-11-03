@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateCtListTable extends Migration
+class CreateCtWineListTable extends Migration
 {
     /**
      * Run the migrations.
@@ -12,7 +12,7 @@ class CreateCtListTable extends Migration
      */
     public function up()
     {
-        Schema::create('ct_list', function (Blueprint $table) {
+        Schema::create('ct_wine_list', function (Blueprint $table) {
             $table->increments('id');
             $table->unsignedInteger('user_id');
             $table->unsignedInteger('i_wine')->nullable();
@@ -22,8 +22,8 @@ class CreateCtListTable extends Migration
             $table->decimal('price', 8, 2)->nullable();
             $table->decimal('valuation', 8, 2)->nullable();
             $table->string('my_value')->nullable();
-            $table->string('wbvalue')->nullable();
-            $table->string('ctvalue')->nullable();
+            $table->string('wb_value')->nullable();
+            $table->string('ct_value')->nullable();
             $table->string('vintage')->nullable();
             $table->string('wine')->nullable();
             $table->string('locale')->nullable();
@@ -79,6 +79,6 @@ class CreateCtListTable extends Migration
      */
     public function down()
     {
-        Schema::drop('ct_list');
+        Schema::drop('ct_wine_list');
     }
 }

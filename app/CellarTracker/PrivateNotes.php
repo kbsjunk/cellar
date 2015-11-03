@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class PrivateNotes extends Model
 {
+    protected $table = 'ct_private_notes';
+
     use SoftDeletes;
 
     public function user()

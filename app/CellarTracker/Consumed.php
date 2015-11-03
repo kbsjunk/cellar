@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Consumed extends Model
 {
+    protected $table = 'ct_consumed';
+
     use SoftDeletes;
 
     public function user()

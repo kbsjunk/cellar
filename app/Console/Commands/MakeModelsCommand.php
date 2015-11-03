@@ -55,8 +55,10 @@ class MakeModelsCommand extends Command
         foreach ($files as $file) {
 
             $model = $this->modelNamespace.'\\'.studly_case($file->getBaseName('.'.$file->getExtension()));
-			
 			if ($model == $this->modelNamespace.'\\List') { $model = $this->modelNamespace.'\\WineList'; }
+			
+            $table = 'ct_'.snake_case($file->getBaseName('.'.$file->getExtension()));
+			if ($table == 'ct_list') { $table = 'ct_wine_list'; }
 			
             $modelPath = app_path(str_replace('\\','/',$model).'.php');
 
@@ -80,6 +82,8 @@ class MakeModelsCommand extends Command
                 $contents);
 
             $lines = [
+            '    protected $table = \''.$table.'\';',
+			null,
             '    use SoftDeletes;',
             null,
             '    public function user()',

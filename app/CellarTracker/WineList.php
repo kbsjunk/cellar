@@ -7,6 +7,10 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class WineList extends Model
 {
+    protected $table = 'ct_wine_list';
+	
+	protected $fillable = ['*'];
+
     use SoftDeletes;
 
     public function user()

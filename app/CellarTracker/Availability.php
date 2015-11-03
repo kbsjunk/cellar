@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Availability extends Model
 {
+    protected $table = 'ct_availability';
+
     use SoftDeletes;
 
     public function user()

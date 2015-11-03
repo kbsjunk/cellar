@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Tag extends Model
 {
+    protected $table = 'ct_tag';
+
     use SoftDeletes;
 
     public function user()

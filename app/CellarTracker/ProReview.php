@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class ProReview extends Model
 {
+    protected $table = 'ct_pro_review';
+
     use SoftDeletes;
 
     public function user()

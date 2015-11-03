@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Inventory extends Model
 {
+    protected $table = 'ct_inventory';
+
     use SoftDeletes;
 
     public function user()

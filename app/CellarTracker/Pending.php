@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Pending extends Model
 {
+    protected $table = 'ct_pending';
+
     use SoftDeletes;
 
     public function user()

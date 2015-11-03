@@ -5,8 +5,8 @@ size
 price:decimal:8,2
 valuation:decimal:8,2
 my_value
-wbvalue
-ctvalue
+wb_value
+ct_value
 vintage
 wine
 locale

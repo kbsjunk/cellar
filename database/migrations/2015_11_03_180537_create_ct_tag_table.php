@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateCtNotesTable extends Migration
+class CreateCtTagTable extends Migration
 {
     /**
      * Run the migrations.
@@ -12,16 +12,25 @@ class CreateCtNotesTable extends Migration
      */
     public function up()
     {
-        Schema::create('ct_notes', function (Blueprint $table) {
+        Schema::create('ct_tag', function (Blueprint $table) {
             $table->increments('id');
             $table->unsignedInteger('user_id');
-            $table->unsignedInteger('i_wine')->nullable();
-            $table->string('type')->nullable();
+            $table->string('list_name')->nullable();
+            $table->string('list_notes')->nullable();
+            $table->string('private')->nullable();
+            $table->string('wines_notes')->nullable();
+            $table->string('max_price')->nullable();
+            $table->string('size')->nullable();
             $table->string('vintage')->nullable();
             $table->string('wine')->nullable();
-            $table->string('sort_wine')->nullable();
             $table->string('locale')->nullable();
+            $table->string('sort_wine')->nullable();
+            $table->string('i_wine')->nullable();
+            $table->string('type')->nullable();
+            $table->string('color')->nullable();
+            $table->string('category')->nullable();
             $table->string('producer')->nullable();
+            $table->string('sort_producer')->nullable();
             $table->string('varietal')->nullable();
             $table->string('master_varietal')->nullable();
             $table->string('designation')->nullable();
@@ -30,19 +39,7 @@ class CreateCtNotesTable extends Migration
             $table->string('region')->nullable();
             $table->string('sub_region')->nullable();
             $table->string('appellation')->nullable();
-            $table->string('tasting_date')->nullable();
-            $table->string('defective')->nullable();
-            $table->string('f_allow_comments')->nullable();
-            $table->string('f_helpful')->nullable();
-            $table->string('rating')->nullable();
-            $table->string('tasting_notes')->nullable();
-            $table->string('f_like_it')->nullable();
-            $table->string('cnotes')->nullable();
-            $table->string('cscore')->nullable();
-            $table->string('like_votes')->nullable();
-            $table->string('like_percent')->nullable();
-            $table->string('votes')->nullable();
-            $table->string('comments')->nullable();
+            $table->string('upc_code')->nullable();
             $table->softDeletes();
             $table->timestamps();
         });
@@ -55,6 +52,6 @@ class CreateCtNotesTable extends Migration
      */
     public function down()
     {
-        Schema::drop('ct_notes');
+        Schema::drop('ct_tag');
     }
 }

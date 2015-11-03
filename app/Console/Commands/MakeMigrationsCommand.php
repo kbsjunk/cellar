@@ -73,6 +73,8 @@ class MakeMigrationsCommand extends Command
         foreach ($files as $file) {
 
             $table = 'ct_'.snake_case($file->getBaseName('.'.$file->getExtension()));
+			
+			if ($table == 'ct_list') { $table = 'ct_wine_list'; }
 
             $name = "create_{$table}_table";
             $create = $table;
@@ -81,10 +83,10 @@ class MakeMigrationsCommand extends Command
 
             $fields = File::get($file);
 
-            $fields = explode("\r\n", $fields);
+            $fields = explode(PHP_EOL, $fields);
 
             $fields = array_map(function($field) {
-                @list($field, $type, $params) = explode(':', $field);
+                @list($field, $type, $params) = explode(':', trim($field));
                 
                 $type = $type ?: 'string';
                 $params = $params ? ', '.str_replace(',',', ',$params) : null;
