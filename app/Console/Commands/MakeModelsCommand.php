@@ -3,7 +3,7 @@
 namespace Cellar\Console\Commands;
 
 use Illuminate\Console\Command;
-
+use App;
 use File;
 
 class MakeModelsCommand extends Command
@@ -13,7 +13,8 @@ class MakeModelsCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'cellar:models';
+    protected $signature = 'cellar:models
+		{--force}';
 
     /**
      * The console command description.
@@ -21,6 +22,8 @@ class MakeModelsCommand extends Command
      * @var string
      */
     protected $description = 'Make models for CellarTracker data.';
+	
+	protected $modelNamespace = 'CellarTracker';
 
     /**
      * Execute the console command.
@@ -36,19 +39,29 @@ class MakeModelsCommand extends Command
 
         foreach ($files as $file) {
             $file = $file->getBaseName('.'.$file->getExtension());
-            $relations[camel_case($file)] = 'CT'.studly_case($file);
+			
+			$key = camel_case($file);
+			$file = studly_case($file);
+			
+			if ($key == 'list') { $key = 'wineList'; $file = 'WineList'; }
+			
+            $relations[$key] = $this->modelNamespace.'\\'.$file;
         }
 
         unset($relations['tag']);
 
+		File::makeDirectory(app_path($this->modelNamespace), 0755, true, true);
+		
         foreach ($files as $file) {
 
-            $model = 'CT'.studly_case($file->getBaseName('.'.$file->getExtension()));
-
-            $modelPath = app_path($model.'.php');
+            $model = $this->modelNamespace.'\\'.studly_case($file->getBaseName('.'.$file->getExtension()));
+			
+			if ($model == $this->modelNamespace.'\\List') { $model = $this->modelNamespace.'\\WineList'; }
+			
+            $modelPath = app_path(str_replace('\\','/',$model).'.php');
 
             if (File::exists($modelPath)) {
-                if ($this->confirm('File ['.$modelPath.'] already exists.'.PHP_EOL.' Do you wish to continue?')) {
+                if ($this->option('force') || $this->confirm('File ['.$modelPath.'] already exists.'.PHP_EOL.' Do you wish to continue?')) {
                     File::delete($modelPath);
                 }
                 else {
@@ -71,20 +84,21 @@ class MakeModelsCommand extends Command
             null,
             '    public function user()',
             '    {',
-            '        return $this->belongsTo(\'Cellar\User\');',
+            '        return $this->belongsTo(\''.App::getNamespace().'User\');',
             '    }',
             ];
 
-            if ($model != 'CTTag') {
+            if ($model != $this->modelNamespace.'\\'.'Tag') {
                 foreach ($relations as $relation => $modelName) {
-                    if ($modelName != $model && $modelName != 'CTTag') {
+                    if ($modelName != $model && $modelName != $this->modelNamespace.'\\'.'Tag') {
 
-                        $relationship = $modelName == 'CTInventory' ? 'hasMany' : 'hasOne';
+                        $relationship = $modelName == $this->modelNamespace.'\\'.'Inventory' ? 'hasMany' : 'hasOne';
+/* 						$relation = $relationship == 'hasMany' ? str_plural($relation) : str_singular($relation); */
 
                         $lines[] = null;
                         $lines[] = '    public function '.$relation.'()';
                         $lines[] = '    {';
-                        $lines[] = '        return $this->'.$relationship.'(\'Cellar\\'.$model.'\', \'i_wine\', \'i_wine\');';
+                        $lines[] = '        return $this->'.$relationship.'(\''.App::getNamespace().$modelName.'\', \'i_wine\', \'i_wine\');';
                         $lines[] = '    }';
                     }
                 }

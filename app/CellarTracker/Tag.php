@@ -1,11 +1,11 @@
 <?php
 
-namespace Cellar;
+namespace Cellar\CellarTracker;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class CTTag extends Model
+class Tag extends Model
 {
     use SoftDeletes;
 
