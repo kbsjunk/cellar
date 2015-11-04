@@ -4,39 +4,42 @@ namespace Cellar\CellarTracker;
 
 use Goutte\Client;
 
+use Auth;
+use Cellar\User;
+
 class Downloader
 {
 	protected $client;
-	protected $username;
-	protected $password;
+	protected $user;
 	
 	public function __construct()
 	{
 		$this->client = new Client;
-		$this->username = env('CT_USERNAME');
-		$this->password = env('CT_PASSWORD');
+		$this->user = User::find(2); //FIXME Auth::user();
 	}
 	
 	public function getClient()
 	{
-		return $this->client;	
+		return $this->client;
 	}
 	
 	public function setClient(Client $client)
 	{
-		$this->client = $client;	
+		$this->client = $client;
 	}
 	
 	public function get($table)
 	{
-		$url = sprintf('https://www.cellartracker.com/xlquery.asp?table=%s&User=%s&Password=%s', $table, $this->username, $this->password);
+		$table = studly_case($table);
+
+		$url = sprintf('https://www.cellartracker.com/xlquery.asp?table=%s&User=%s&Password=%s', $table, $this->user->ct_username, $this->user->ct_password);
 		
 		$crawler = $this->client->request('GET', $url);
 		
 		$headers = [];
 		
 		$crawler->filter('table tr:first-child th')->each(function ($th) use (&$headers) {
-			$headers[] = strtolower(preg_replace(['/([a-z])([A-Z])/', '/^([A-Z]+)([A-Z][a-z]+)/'], '$1_$2', $th->text()));
+			$headers[] = static::columnHeading($th->text());
 		});
 		
 		$rows = [];
@@ -50,23 +53,40 @@ class Downloader
 			
 		});
 		
-		$keys = array_filter($headers, function($key) {
-			return stripos($key, 'i_') === 0;
-		});
+		$keys = static::findIndexes($headers);
 		
 		$keys[] = 'user_id';
 		
-		$model = $table == 'List' ? 'WineList' : $model;
+		$model = $table == 'List' ? 'WineList' : $table;
 		
 		$model = 'Cellar\\CellarTracker\\'.$model;
 		$model = new $model;
-		
+
+		$model->where('user_id', $this->user->id)->delete();
+
+		$model = $model->newInstance();
+
 		foreach ($rows as $row) {
-			$row['user_id'] = 1;
-			$findKeys = array_only($row, $keys);
-			$model->unguard();
-			$item = $model->updateOrCreate($findKeys, $row);
+			$row['user_id'] = $this->user->id;
+			$item = $model->withTrashed()->where(array_only($row, $keys))->first();
+			if (!$item) {
+				$item = $model->newInstance();
+			}
+			$item->fill($row)->save();
+			$item->restore();
 		}
 		
+	}
+
+	public static function columnHeading($string)
+	{
+		return strtolower(preg_replace(['/([a-z])([A-Z])/', '/^([A-Z]+)([A-Z][a-z]+)/'], '$1_$2', $string));
+	}
+
+	public static function findIndexes($headers)
+	{
+		return array_filter($headers, function($key) {
+			return stripos($key, 'i_') === 0;
+		});
 	}
 }

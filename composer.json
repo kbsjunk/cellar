@@ -7,7 +7,11 @@
     "require": {
         "php": ">=5.5.9",
         "laravel/framework": "5.1.*",
-        "fabpot/goutte": "^3.1"
+        "fabpot/goutte": "^3.1",
+        "zendframework/zend-barcode": "^2.5",
+        "aferrandini/phpqrcode": "^1.0",
+        "tecnickcom/tcpdf": "^6.2",
+        "barryvdh/laravel-httpcache": "^0.2.3"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",

@@ -9,6 +9,8 @@ class Tag extends Model
 {
     protected $table = 'ct_tag';
 
+    protected $guarded = ['id', 'deleted_at', 'created_at', 'updated_at'];
+
     use SoftDeletes;
 
     public function user()

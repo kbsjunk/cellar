@@ -83,6 +83,8 @@ class MakeModelsCommand extends Command
 
             $lines = [
             '    protected $table = \''.$table.'\';',
+            null,
+            '    protected $guarded = [\'id\', \'deleted_at\', \'created_at\', \'updated_at\'];',
 			null,
             '    use SoftDeletes;',
             null,

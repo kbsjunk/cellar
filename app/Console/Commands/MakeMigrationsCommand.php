@@ -7,6 +7,8 @@ use Illuminate\Database\Migrations\MigrationCreator;
 
 use Illuminate\Console\Command;
 
+use Cellar\CellarTracker\Downloader;
+
 use File;
 
 class MakeMigrationsCommand extends Command
@@ -73,8 +75,8 @@ class MakeMigrationsCommand extends Command
         foreach ($files as $file) {
 
             $table = 'ct_'.snake_case($file->getBaseName('.'.$file->getExtension()));
-			
-			if ($table == 'ct_list') { $table = 'ct_wine_list'; }
+
+            if ($table == 'ct_list') { $table = 'ct_wine_list'; }
 
             $name = "create_{$table}_table";
             $create = $table;
@@ -85,11 +87,14 @@ class MakeMigrationsCommand extends Command
 
             $fields = explode(PHP_EOL, $fields);
 
-            $fields = array_map(function($field) {
+            $indexes = [];
+
+            $fields = array_map(function($field) use (&$indexes) {
                 @list($field, $type, $params) = explode(':', trim($field));
                 
                 $type = $type ?: 'string';
                 $params = $params ? ', '.str_replace(',',', ',$params) : null;
+                $indexes[] = $field;
 
                 return '$table->'.$type.'(\''.snake_case($field).'\''.$params.')->nullable();';
             }, $fields);
@@ -98,14 +103,24 @@ class MakeMigrationsCommand extends Command
 
             $contents = File::get($migration);
 
+            $indexes = Downloader::findIndexes($indexes);
+
+            $lines = [
+            '$table->increments(\'id\');',
+            '$table->unsignedInteger(\'user_id\');',
+            implode(PHP_EOL.$tabs, $fields),
+            '$table->softDeletes();',
+            ];
+
+            if (count($indexes)) {
+                $lines[] = '$table->unique([\'user_id\', \''.implode('\', \'', $indexes).'\']);';
+            }
+
             $contents = str_replace(
                 '$table->increments(\'id\');',
-                '$table->increments(\'id\');'.PHP_EOL.$tabs.
-                '$table->unsignedInteger(\'user_id\');'.PHP_EOL.$tabs.
-                implode(PHP_EOL.$tabs, $fields).PHP_EOL.$tabs.
-                '$table->softDeletes();',
+                implode(PHP_EOL.$tabs, $lines),
                 $contents);
-
+            
             File::put($migration, $contents);
 
         }
@@ -114,7 +129,7 @@ class MakeMigrationsCommand extends Command
 
     }
 
-        /**
+    /**
      * Write the migration file to disk.
      *
      * @param  string  $name
@@ -122,16 +137,16 @@ class MakeMigrationsCommand extends Command
      * @param  bool    $create
      * @return string
      */
-        protected function writeMigration($name, $table, $create)
-        {
-            $path = $this->getMigrationPath();
+    protected function writeMigration($name, $table, $create)
+    {
+        $path = $this->getMigrationPath();
 
-            $file = pathinfo($this->creator->create($name, $path, $table, $create), PATHINFO_FILENAME);
+        $file = pathinfo($this->creator->create($name, $path, $table, $create), PATHINFO_FILENAME);
 
-            $this->line("<info>Created Migration:</info> $file");
+        $this->line("<info>Created Migration:</info> $file");
 
-            return $file;
-        }
+        return $file;
+    }
 
     /**
      * Get migration path (either specified by '--path' option or default location).

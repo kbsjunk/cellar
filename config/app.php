@@ -145,6 +145,11 @@ return [
         Cellar\Providers\EventServiceProvider::class,
         Cellar\Providers\RouteServiceProvider::class,
 
+        /*
+         * Vendor Service Providers...
+         */
+        Barryvdh\HttpCache\ServiceProvider::class,
+
     ],
 
     /*

@@ -8,8 +8,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class WineList extends Model
 {
     protected $table = 'ct_wine_list';
-	
-	protected $fillable = ['*'];
+
+    protected $guarded = ['id', 'deleted_at', 'created_at', 'updated_at'];
 
     use SoftDeletes;
 
@@ -18,29 +18,14 @@ class WineList extends Model
         return $this->belongsTo('Cellar\User');
     }
 
-    public function consumed()
-    {
-        return $this->hasOne('Cellar\CellarTracker\Consumed', 'i_wine', 'i_wine');
-    }
-
-    public function purchase()
-    {
-        return $this->hasOne('Cellar\CellarTracker\Purchase', 'i_wine', 'i_wine');
-    }
-
-    public function privateNotes()
-    {
-        return $this->hasOne('Cellar\CellarTracker\PrivateNotes', 'i_wine', 'i_wine');
-    }
-
     public function availability()
     {
         return $this->hasOne('Cellar\CellarTracker\Availability', 'i_wine', 'i_wine');
     }
 
-    public function pending()
+    public function consumed()
     {
-        return $this->hasOne('Cellar\CellarTracker\Pending', 'i_wine', 'i_wine');
+        return $this->hasOne('Cellar\CellarTracker\Consumed', 'i_wine', 'i_wine');
     }
 
     public function inventory()
@@ -53,8 +38,23 @@ class WineList extends Model
         return $this->hasOne('Cellar\CellarTracker\Notes', 'i_wine', 'i_wine');
     }
 
+    public function pending()
+    {
+        return $this->hasOne('Cellar\CellarTracker\Pending', 'i_wine', 'i_wine');
+    }
+
+    public function privateNotes()
+    {
+        return $this->hasOne('Cellar\CellarTracker\PrivateNotes', 'i_wine', 'i_wine');
+    }
+
     public function proReview()
     {
         return $this->hasOne('Cellar\CellarTracker\ProReview', 'i_wine', 'i_wine');
+    }
+
+    public function purchase()
+    {
+        return $this->hasOne('Cellar\CellarTracker\Purchase', 'i_wine', 'i_wine');
     }
 }

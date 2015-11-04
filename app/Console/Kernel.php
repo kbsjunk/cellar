@@ -13,9 +13,9 @@ class Kernel extends ConsoleKernel
      * @var array
      */
     protected $commands = [
-        \Cellar\Console\Commands\Inspire::class,
         \Cellar\Console\Commands\MakeMigrationsCommand::class,
         \Cellar\Console\Commands\MakeModelsCommand::class,
+        \Cellar\Console\Commands\DownloadCellarTrackerCommand::class,
     ];
 
     /**

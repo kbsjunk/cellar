@@ -9,6 +9,8 @@ class Consumed extends Model
 {
     protected $table = 'ct_consumed';
 
+    protected $guarded = ['id', 'deleted_at', 'created_at', 'updated_at'];
+
     use SoftDeletes;
 
     public function user()
@@ -16,24 +18,9 @@ class Consumed extends Model
         return $this->belongsTo('Cellar\User');
     }
 
-    public function purchase()
-    {
-        return $this->hasOne('Cellar\CellarTracker\Purchase', 'i_wine', 'i_wine');
-    }
-
-    public function privateNotes()
-    {
-        return $this->hasOne('Cellar\CellarTracker\PrivateNotes', 'i_wine', 'i_wine');
-    }
-
     public function availability()
     {
         return $this->hasOne('Cellar\CellarTracker\Availability', 'i_wine', 'i_wine');
-    }
-
-    public function pending()
-    {
-        return $this->hasOne('Cellar\CellarTracker\Pending', 'i_wine', 'i_wine');
     }
 
     public function inventory()
@@ -41,9 +28,24 @@ class Consumed extends Model
         return $this->hasMany('Cellar\CellarTracker\Inventory', 'i_wine', 'i_wine');
     }
 
+    public function wineList()
+    {
+        return $this->hasOne('Cellar\CellarTracker\WineList', 'i_wine', 'i_wine');
+    }
+
     public function notes()
     {
         return $this->hasOne('Cellar\CellarTracker\Notes', 'i_wine', 'i_wine');
+    }
+
+    public function pending()
+    {
+        return $this->hasOne('Cellar\CellarTracker\Pending', 'i_wine', 'i_wine');
+    }
+
+    public function privateNotes()
+    {
+        return $this->hasOne('Cellar\CellarTracker\PrivateNotes', 'i_wine', 'i_wine');
     }
 
     public function proReview()
@@ -51,8 +53,8 @@ class Consumed extends Model
         return $this->hasOne('Cellar\CellarTracker\ProReview', 'i_wine', 'i_wine');
     }
 
-    public function wineList()
+    public function purchase()
     {
-        return $this->hasOne('Cellar\CellarTracker\WineList', 'i_wine', 'i_wine');
+        return $this->hasOne('Cellar\CellarTracker\Purchase', 'i_wine', 'i_wine');
     }
 }
