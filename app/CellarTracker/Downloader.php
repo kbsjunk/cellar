@@ -6,6 +6,7 @@ use Goutte\Client;
 
 use Auth;
 use Cellar\User;
+use Exception;
 
 class Downloader
 {
@@ -15,7 +16,8 @@ class Downloader
 	public function __construct()
 	{
 		$this->client = new Client;
-		$this->user = User::find(2); //FIXME Auth::user();
+		//FIXME Auth::user();
+		$this->user = User::where('email', 'user@cellar')->first();
 	}
 	
 	public function getClient()
@@ -30,7 +32,15 @@ class Downloader
 	
 	public function get($table)
 	{
+		if (!$this->user) {
+			throw new Exception('No CellarTracker user found.');
+		}
+		
 		$table = studly_case($table);
+		
+		if (!in_array($table, ['Availability', 'Consumed', 'Inventory', 'Notes', 'Pending', 'PrivateNotes', 'ProReview', 'Purchase', 'Tag', 'WineList', 'List'])) {
+			throw new Exception('['.$table.'] is not a valid CellarTracker API table.');
+		}
 
 		$url = sprintf('https://www.cellartracker.com/xlquery.asp?table=%s&User=%s&Password=%s', $table, $this->user->ct_username, $this->user->ct_password);
 		
