@@ -11,6 +11,8 @@ class Inventory extends Model
 
     protected $guarded = ['id', 'deleted_at', 'created_at', 'updated_at'];
 
+    protected $appends = ['row', 'col', 'address'];
+
     use SoftDeletes;
 
     public function user()
@@ -56,5 +58,20 @@ class Inventory extends Model
     public function purchase()
     {
         return $this->hasOne('Cellar\CellarTracker\Purchase', 'i_wine', 'i_wine');
+    }
+
+    public function getRowAttribute()
+    {
+        
+    }
+
+    public function getColAttribute()
+    {
+
+    }
+
+    public function getAddressAttribute()
+    {
+        return '';
     }
 }

@@ -129,7 +129,7 @@
 							<li class="rack-row-header">
 								@{{ r + 1 }}
 							</li>
-							<li v-for="(c, col) in row.columns" class="rack-cell @{{ col.status }}">
+							<li v-for="(c, col) in row.columns" v-droppable class="rack-cell @{{ col.status }}">
 
 							</li>
 						</ul>
@@ -139,7 +139,11 @@
 			<div class="col-md-6">
 				<h3>Wines</h3>
 				<ul id="wines" class="list-unstyled wine-list">
-					<li v-for="wine in wines" class="drag-wine"><span class="bottle"></span>@{{ wine.wine }}</li>
+					<li v-for="wine in wines | filterBy noAddress" v-draggable class="drag-wine" data-wine="@{{ wine.id }}"><span class="bottle"></span>@{{ wine.wine }}</li>
+				</ul>
+				<h3>Placed Wines</h3>
+				<ul id="wines" class="list-unstyled wine-list">
+					<li v-for="wine in wines | filterBy hasAddress" class="drag-wine"><span class="bottle"></span>@{{ wine.wine }}</li>
 				</ul>
 			</div>
 		</div>

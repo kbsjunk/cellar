@@ -1,5 +1,44 @@
 Vue.config.debug = true;
 
+Vue.directive('draggable', {
+	priority: 1000,
+
+	bind: function () {
+		var self = this;
+
+		$(self.el).draggable({
+			handle: '.bottle',
+			helper: function() { return $('<div class="ui-draggable-dragging" />'); },
+			cursorAt: { top: 16, left: 16 },
+			revert: 'invalid',
+			cursor: '-webkit-grabbing',
+			stop: function() {
+				console.log(self.el);
+			}
+		});
+	},
+	update: function (value) {
+	},
+});
+
+Vue.directive('droppable', {
+	priority: 1000,
+
+	bind: function () {
+		var self = this;
+
+		$(self.el).droppable({
+			accept: "#wines li",
+			drop: function( event, ui ) {
+				self.dragged = $(ui.draggable);
+				$(this).addClass( "dropped" );
+				// console.log(self);
+				// console.log($(ui.draggable).data('wine'));
+			}
+		});
+	},
+});
+
 new Vue({
 
 	el: '#racks',
@@ -7,7 +46,6 @@ new Vue({
 	ready: function() {
 		this.getRack();
 		this.getWines();
-		// $( "li.dragwine" ).draggable();
 	},
 
 	data: {
@@ -16,7 +54,18 @@ new Vue({
 		selected: []
 	},
 
+	filters: {
+	},
+
 	methods: {
+		noAddress: function(item) {
+			var address = item.address;
+			return (!item.address || 0 === address.length);
+		},
+		hasAddress: function(item) {
+			var address = item.address;
+			return !(!item.address || 0 === address.length);
+		},
 		spreadsheetColumnLabel: function(index) {
 			/* http://docs.handsontable.com/0.15.0-beta3/helpers.js.html */
 			var dividend = index + 1;
@@ -31,9 +80,6 @@ new Vue({
 		},
 		selectCells: function() {
 
-			this.$set('selected', []);
-
-			console.log(this.data.selected);
 
 		},
 		getRack: function() {
@@ -59,22 +105,22 @@ new Vue({
 			});
 		},
 		makeDraggable: function() {
-			$( "#wines li" ).draggable({
-				handle: '.bottle',
-				helper: function() { return $('<div class="ui-draggable-dragging" />'); },
-				cursorAt: { top: 16, left: 16 },
-				revert: 'invalid',
-				cursor: '-webkit-grabbing'
-			});
-			$( "#rack li.rack-cell.open" ).droppable({
-				accept: "#wines li",
-				// activeClass: "ui-state-hover",
-				// hoverClass: "ui-state-active",
-				drop: function( event, ui ) {
-					$(this).addClass( "dropped" );
-				}
-			});
-		}
-	}
+			// $( "#wines li" ).draggable({
+			// 	handle: '.bottle',
+			// 	helper: function() { return $('<div class="ui-draggable-dragging" />'); },
+			// 	cursorAt: { top: 16, left: 16 },
+			// 	revert: 'invalid',
+			// 	cursor: '-webkit-grabbing'
+			// });
+			// $( "#rack li.rack-cell.open" ).droppable({
+			// 	accept: "#wines li",
+			// 	drop: function( event, ui ) {
+			// 		$(this).addClass( "dropped" );
+			// 		console.log($(ui.draggable).data('wine'));
+			// 	}
+			// });
+}
+}
 
 });
+
