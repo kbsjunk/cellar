@@ -60,10 +60,11 @@ new Vue({
 		},
 		makeDraggable: function() {
 			$( "#wines li" ).draggable({
+				handle: '.bottle',
 				helper: function() { return $('<div class="ui-draggable-dragging" />'); },
 				cursorAt: { top: 16, left: 16 },
 				revert: 'invalid',
-				cursor: 'move'
+				cursor: '-webkit-grabbing'
 			});
 			$( "#rack li.rack-cell.open" ).droppable({
 				accept: "#wines li",

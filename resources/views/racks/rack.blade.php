@@ -29,6 +29,12 @@
 			border-radius: 100px;
 			position: relative;
 		}
+		.rack, .wine-list {
+			user-select: none;
+			-moz-user-select: none;
+			-webkit-user-select: none;
+			-ms-user-select: none;
+		}
 		.rack {
 			overflow: auto;
 			white-space: nowrap;
@@ -51,7 +57,7 @@
 			height: 40px;
 			line-height: 70px;
 			/*height: 28px;*/
-		    /*padding-top: 8px;*/
+			/*padding-top: 8px;*/
 		}
 		.rack .rack-intersect {
 			width: 20px;
@@ -68,6 +74,18 @@
 		.rack .rack-row-header {
 			text-align: center;
 			font-weight: bold;
+		}
+		.drag-wine .bottle {
+			width: 16px;
+			height: 16px;
+			display: inline-block;
+			border: 1px solid #ddd;
+			border-radius: 100px;
+			margin-top: 4px;
+			margin-bottom: -4px;
+			margin-right: 6px;
+			cursor: -webkit-grab;
+			cursor: -moz-grab;
 		}
 	</style>
 </head>
@@ -120,8 +138,8 @@
 			</div>
 			<div class="col-md-6">
 				<h3>Wines</h3>
-				<ul id="wines" class="list-unstyled">
-					<li v-for="wine in wines" class="dragwine">@{{ wine.wine }}</li>
+				<ul id="wines" class="list-unstyled wine-list">
+					<li v-for="wine in wines" class="drag-wine"><span class="bottle"></span>@{{ wine.wine }}</li>
 				</ul>
 			</div>
 		</div>
