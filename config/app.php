@@ -148,7 +148,6 @@ return [
         /*
          * Vendor Service Providers...
          */
-//         Barryvdh\HttpCache\ServiceProvider::class,
 
     ],
 

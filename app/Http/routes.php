@@ -47,3 +47,44 @@ Route::get('/barcode/{code}', function ($code) {
 	return $response->setContent($barcode);
 
 });
+
+Route::get('/racks.json', function () {
+
+
+	$rows = 8;
+	$columns = 12;
+
+	$rack = ['columns' => $columns];
+
+	for ($r=0; $r < $rows; $r++) {
+		$row = [];
+		for ($c=0; $c < $columns; $c++) { 
+			$status = (($c / ($r+1)) % 3) < 2 ? 'open' : 'closed';
+
+			$cell = [
+			'status' => $status,
+			];
+
+			$row['columns'][] = $cell;
+		}
+		$rack['rows'][] = $row;
+	}
+
+	return response($rack);
+
+});
+
+Route::get('/wines.json', function () {
+
+	$wines = Cellar\CellarTracker\Inventory::get();
+
+	return response($wines);
+
+});
+
+
+Route::get('/racks', function () {
+
+	return view('racks/rack');
+
+});

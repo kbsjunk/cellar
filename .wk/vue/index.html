@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Document</title>
+	<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.5/css/bootstrap.css">
+	<style>
+	.open {
+
+	}
+	.closed {
+		background: #ddd;
+	}
+	.ui-selecting {
+		background: #eee;
+	}
+	.ui-selected {
+		background: #bbb;
+	}
+	</style>
+</head>
+<body>
+
+	<div class="container">
+		<div id="tasks">
+			<div v-for="rack in racks">
+				<h3>{{ rack.name }}</h3>
+				<table class="table table-bordered rack" style="width:auto;">
+					<thead>
+						<tr>
+							<th style="width:40px"></th>
+							<th style="width:40px;height:40px" v-for="column in rack.rows[0].columns">
+								{{ spreadsheetColumnLabel($index) }}
+							</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr v-for="row in rack.rows">
+							<th>
+							{{ $index + 1 }}
+							</th>
+							<td v-for="cell in row.columns" class="{{ cell.status }}">
+								
+							</td>
+						</tr>
+					</tr>
+				</table>
+
+			</div>
+
+		</div>
+	</div>
+
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/vue/1.0.4/vue.js" type="text/javascript" charset="utf-8"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js" type="text/javascript" charset="utf-8"></script>
+
+	<script src="app.js" type="text/javascript" charset="utf-8"></script>
+
+</body>
+</html>
+<!-- 		https://laracasts.com/series/learning-vuejs/episodes/1
+		http://vuejs.org/examples/commits.html
+		file://ebiquity/uds/CityPoint/Folders/kit.senior/My%20Documents/Code/vuejs/index.html -->

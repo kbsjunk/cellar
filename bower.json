@@ -1,0 +1,25 @@
+{
+  "name": "cellar",
+  "version": "0.0.1",
+  "homepage": "https://github.com/kitbs/cellar",
+  "authors": [
+    "Kit Burton-Senior <kit.senior@gmail.com>"
+  ],
+  "description": "",
+  "main": "",
+  "moduleType": [],
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "resources/assets/bower",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "vue": "~1.0.7",
+    "vue-resource": "~0.1.17"
+  }
+}

@@ -5,3 +5,4 @@ Homestead.json
 .env
 *.sublime-project
 *.sublime-workspace
+npm-debug.log
